@@ -2,7 +2,7 @@ name: Hello World Workflow
 
 on:
   push:
-    branches: [main, develop]
+    branches: [main, develop, working-beginner-chathura]
   workflow_dispatch:
 
 jobs:
