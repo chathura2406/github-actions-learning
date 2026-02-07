@@ -36,6 +36,8 @@ jobs:
           npm install
           npm test
 
-      # Task 6: Access secret (Make sure you added TEST_SECRET in GitHub Settings)
+    # Task 6: Access secret 
       - name: Access secret
-        run: echo "Secret length is ${#{{ secrets.TEST_SECRET }}}"
+        run: echo "Secret length is ${#SECRET_VALUE}"
+        env:
+          SECRET_VALUE: ${{ secrets.TEST_SECRET }}
