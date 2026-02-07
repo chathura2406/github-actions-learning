@@ -8,6 +8,11 @@ on:
 jobs:
   custom-job:
     runs-on: ubuntu-latest
+    
+    # Task 7: Matrix strategy to test on multiple Node versions
+    strategy:
+      matrix:
+        node-version: [16.x, 18.x, 20.x]
 
     # Task 5: Job level environment variables
     env:
@@ -18,10 +23,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Set up Node.js
+      # Task 7: Setup Node.js based on matrix version
+      - name: Set up Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
         with:
-          node-version: '18'
+          node-version: ${{ matrix.matrix.node-version }}
 
       # Task 5: Print environment variables
       - name: Print environment
@@ -29,14 +35,14 @@ jobs:
           echo "Environment: ${{ env.NODE_ENV }}"
           echo "Log Level: ${{ env.LOG_LEVEL }}"
 
-      # Task 4: Run install , test
+      # Task 4: Run install and test in the sample-app directory
       - name: Install and Test
         run: |
           cd sample-app
           npm install
           npm test
 
-    # Task 6: Access secret 
+      # Task 6: Access secret securely using an env variable to avoid Bash errors
       - name: Access secret
         run: echo "Secret length is ${#SECRET_VALUE}"
         env:
