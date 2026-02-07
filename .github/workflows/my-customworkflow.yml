@@ -29,7 +29,7 @@ jobs:
           echo "Environment: ${{ env.NODE_ENV }}"
           echo "Log Level: ${{ env.LOG_LEVEL }}"
 
-      # Task 4: Run install and test
+      # Task 4: Run install , test
       - name: Install and Test
         run: |
           cd sample-app
