@@ -1,14 +1,16 @@
-name: Custom Intermediate Workflow
+name: Custom Workflow
 on:
   push:
     branches: [working-intermediate-chathura]
-  workflow_dispatch:
 
 jobs:
-  greet:
+  custom-job:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-      - name: Run a script
-        run: echo "Testing my custom workflow for Intermediate badge!"
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
