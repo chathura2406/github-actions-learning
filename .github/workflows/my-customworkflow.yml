@@ -1,11 +1,19 @@
 name: Custom Workflow
+
 on:
   push:
     branches: [working-intermediate-chathura]
+  workflow_dispatch:
 
 jobs:
   custom-job:
     runs-on: ubuntu-latest
+
+    # Task 5: Job level environment variables
+    env:
+      NODE_ENV: test
+      LOG_LEVEL: debug
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -14,15 +22,20 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '18'
-        env:
-            NODE_ENV: test
-            LOG_LEVEL: debug
-            
-            steps:
-              - name: Checkout code
-                uses: actions/checkout@v3
 
-              - name: Print environment
-                run: |
-                  echo "Environment: ${{ env.NODE_ENV }}"
-                  echo "Log Level: ${{ env.LOG_LEVEL }}"
+      # Task 5: Print environment variables
+      - name: Print environment
+        run: |
+          echo "Environment: ${{ env.NODE_ENV }}"
+          echo "Log Level: ${{ env.LOG_LEVEL }}"
+
+      # Task 4: Run install and test
+      - name: Install and Test
+        run: |
+          cd sample-app
+          npm install
+          npm test
+
+      # Task 6: Access secret (Make sure you added TEST_SECRET in GitHub Settings)
+      - name: Access secret
+        run: echo "Secret length is ${#{{ secrets.TEST_SECRET }}}"
