@@ -1,0 +1,14 @@
+name: Custom Intermediate Workflow
+on:
+  push:
+    branches: [working-intermediate-chathura]
+  workflow_dispatch:
+
+jobs:
+  greet:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Run a script
+        run: echo "Testing my custom workflow for Intermediate badge!"
