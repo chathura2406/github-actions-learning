@@ -2,6 +2,7 @@ name: Build and Test
 
 on:
   push:
+
     branches: [main, develop, working-advanced-chathura]
     paths:
       - 'sample-app/**'
@@ -21,14 +22,13 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4 # Updated to v4
+        uses: actions/checkout@v4
 
       - name: Setup Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v4 # Updated to v4
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
-          cache: 'npm'
-          cache-dependency-path: 'sample-app/package-lock.json'
+
 
       - name: Install dependencies
         working-directory: ./sample-app
@@ -38,15 +38,17 @@ jobs:
         working-directory: ./sample-app
         run: npm run build
 
-      # --- Task 8: Upload Artifact (Using v4) ---
-      - name: Create artifact file
-        run: echo "Build output for Chathura - Advanced Task" > advanced-output.txt
+      # --- Task 8: Create and Upload Artifact ---
+      - name: Create artifact
+        run: echo "Build output for Chathura - Task 8 Success" > output.txt
 
-      - name: Upload advanced artifact
+      - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: chathura-build-output-${{ matrix.node-version }} # Matrix nisa name eka wenas wenna oni
-          path: advanced-output.txt
+          # Matrix testing nisa unique namak danna oni
+          name: build-output-${{ matrix.node-version }}
+          path: output.txt
+      # ------------------------------------------
 
       - name: Run tests
         working-directory: ./sample-app
@@ -60,6 +62,7 @@ jobs:
           path: sample-app/coverage/
           retention-days: 30
 
+  # --- Task 8: New job that depends on build-and-test ---
   download-artifact-job:
     name: Download and Verify Artifact
     needs: [build-and-test]
@@ -68,12 +71,12 @@ jobs:
       - name: Download artifact
         uses: actions/download-artifact@v4
         with:
-          name: chathura-build-output-18.x 
+          name: build-output-18.x
 
-      - name: Read artifact content
+      - name: Read artifact
         run: |
-          echo "Reading the downloaded file content:"
-          cat advanced-output.txt
+          echo "Reading data from the previous job:"
+          cat output.txt
 
   lint-check:
     name: Lint Check
@@ -88,7 +91,7 @@ jobs:
       - name: Run ESLint
         working-directory: ./sample-app
         run: npm run lint
-        continue-on-error: true
+        continue-on-error: true 
 
   test-summary:
     name: Test Summary
@@ -97,4 +100,4 @@ jobs:
     if: always()
     steps:
       - name: Print test results
-        run: echo "✅ All tests completed"
+        run: echo "✅ All tests completed successfully"
