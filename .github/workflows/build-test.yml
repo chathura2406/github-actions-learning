@@ -21,10 +21,10 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4 # Updated to v4
 
       - name: Setup Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4 # Updated to v4
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
@@ -34,25 +34,19 @@ jobs:
         working-directory: ./sample-app
         run: npm ci
 
-      - name: Run linter
-        working-directory: ./sample-app
-        run: npm run lint
-        continue-on-error: true
-
       - name: Build application
         working-directory: ./sample-app
         run: npm run build
 
-      # --- Task 8 Start: Upload Artifact ---
+      # --- Task 8: Upload Artifact (Using v4) ---
       - name: Create artifact file
         run: echo "Build output for Chathura - Advanced Task" > advanced-output.txt
 
       - name: Upload advanced artifact
         uses: actions/upload-artifact@v4
         with:
-          name: chathura-build-output
+          name: chathura-build-output-${{ matrix.node-version }} # Matrix nisa name eka wenas wenna oni
           path: advanced-output.txt
-      # --- Task 8 End ---
 
       - name: Run tests
         working-directory: ./sample-app
@@ -66,17 +60,6 @@ jobs:
           path: sample-app/coverage/
           retention-days: 30
 
-      - name: Check coverage
-        if: always()
-        working-directory: ./sample-app
-        run: |
-          if [ -f coverage/coverage-summary.json ]; then
-            echo "✅ Coverage report generated"
-          else
-            echo "⚠️ No coverage report found"
-          fi
-
-  # --- Task 8: New Job to Download Artifact ---
   download-artifact-job:
     name: Download and Verify Artifact
     needs: [build-and-test]
@@ -85,7 +68,7 @@ jobs:
       - name: Download artifact
         uses: actions/download-artifact@v4
         with:
-          name: chathura-build-output
+          name: chathura-build-output-18.x 
 
       - name: Read artifact content
         run: |
@@ -96,12 +79,10 @@ jobs:
     name: Lint Check
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: '18'
-          cache: 'npm'
-          cache-dependency-path: 'sample-app/package-lock.json'
       - working-directory: ./sample-app
         run: npm ci
       - name: Run ESLint
@@ -116,7 +97,4 @@ jobs:
     if: always()
     steps:
       - name: Print test results
-        run: |
-          echo "🎯 Test Run Summary"
-          echo "==================="
-          echo "✅ All tests completed"
+        run: echo "✅ All tests completed"
