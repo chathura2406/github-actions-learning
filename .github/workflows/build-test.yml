@@ -48,7 +48,7 @@ jobs:
         run: echo "Build output for Chathura - Advanced Task" > advanced-output.txt
 
       - name: Upload advanced artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: chathura-build-output
           path: advanced-output.txt
@@ -60,7 +60,7 @@ jobs:
 
       - name: Upload coverage reports
         if: matrix.node-version == '18.x'
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: coverage-report-${{ matrix.node-version }}
           path: sample-app/coverage/
@@ -83,7 +83,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Download artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: chathura-build-output
 
