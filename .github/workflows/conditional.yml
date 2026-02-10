@@ -1,0 +1,21 @@
+name: Conditional Workflow
+on:
+  push:
+
+    branches: [main, working-advanced-chathura]
+
+jobs:
+  conditional-job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+
+      - name: Deploy to Production
+        if: github.ref == 'refs/heads/main'
+        run: echo "🚀 Deploying to production server because this is the main branch!"
+
+
+      - name: Branch Status
+        run: echo "Current branch is ${{ github.ref }}"
